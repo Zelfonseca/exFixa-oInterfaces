@@ -6,6 +6,9 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import entities.Contract;
+import entities.Installment;
+import services.ContractService;
+import services.PaypalService;
 
 public class Program {
 
@@ -21,19 +24,26 @@ public class Program {
 		System.out.print("Número: ");
 		int number = sc.nextInt();
 		System.out.print("Data (dd/MM/yyyy): ");
-		LocalDate date = LocalDate.parse(sc.nextLine(), fmt);
+		LocalDate date = LocalDate.parse(sc.next(), fmt);
 		System.out.print("Valor do contrato: ");
 		double totalValue = sc.nextDouble();
 		
 		//os dados acima se referem ao contrato, por isso abaixo vou criar o objeto contrato abaixo com os dados do construtor
-		Contract contract = new Contract(number, date, totalValue);
-				//no esquema no lugar do contract está 'obj'
+		Contract obj = new Contract(number, date, totalValue);
+				
 		
 		System.out.println();
 		System.out.print("Entre com o número de parcelas: ");
-		int parcelas = sc.nextInt();
-		System.out.println("Parcelas:");
+		int n = sc.nextInt();
 		
+		ContractService  contractService = new ContractService(new PaypalService()); 
+		
+		contractService.processContract(obj, n);
+		
+		System.out.println("Parcelas:");
+		for(Installment installment : obj.getInstallments()) {
+			System.out.println(installment);
+		}
 		
 		
 		
